@@ -25,13 +25,13 @@ var data_order: Array<string> = reactive([])
 const data: Array<datares> = reactive([])
 
 async function load_data() {
-  console.log('loading data')
   var res = await fetch('/api/data')
   var result: Array<datares> = await res.json()
   data_order.splice(0, data_order.length, ...result.map((r) => { return r.name }))
   data.splice(0, data.length, ...result)
   console.log(data_order)
   console.log(data)
+  console.log('loading data')
 }
 onMounted(load_data)
 watch(route, (n, o) => {
@@ -77,16 +77,19 @@ function check_header_in_viewport() {
           :headline="content.name"
           :content="content.paragraphs"
         />
-        <statistic
-          v-for="visual in content.visuals"
-          :data="data[data_order.indexOf(visual.name)].data"
-          :keys="data[data_order.indexOf(visual.name)].keys"
-          :date="data[data_order.indexOf(visual.name)].date"
-          :name="visual.name"
-          :type="visual.type"
-          class="statistic"
-          v-if="data.length > 0 && data_order.length > 0"
-        />
+        <div class="charts">
+          <statistic
+            v-for="visual in content.visuals"
+            :data="data[data_order.indexOf(visual.name)].data"
+            :keys="data[data_order.indexOf(visual.name)].keys"
+            :date="data[data_order.indexOf(visual.name)].date"
+            :name="visual.name"
+            :type="visual.type"
+            class="statistic"
+            v-if="data.length > 0 && data_order.length > 0"
+            :v-if="data_order.indexOf(visual.name)>=0"
+          />
+        </div>
         <chart-description
           v-if="content.paragraphs && content.orientation == 'right'"
           :headline="content.name"

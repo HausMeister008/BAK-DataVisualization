@@ -45,11 +45,11 @@ const datasets: Array<dataset> = yValues
             backgroundColor: opac_colors[i % opac_colors.length],
             borderColor: colors[i % colors.length],
             hoverBackgroundColor: colors[i % colors.length],
-            poinHoverRadius:1,
-            pointRadius:1,
+            poinHoverRadius: 1,
+            pointRadius: 1,
             pointBorderColor: 'rgba(0,0,0,.5)',
             pointBorderWidth: 6,
-            poinBorderHoverWidth:7,
+            poinBorderHoverWidth: 7,
             pointHoverBackgroundColor: 'rgba(0,0,0,1)',
             fill: true,
             fillOpacity: .5,
@@ -59,13 +59,13 @@ const datasets: Array<dataset> = yValues
 const data = {
     labels: keys,
     datasets: datasets
-} 
+}
 const options = {
     fill: false,
     responsive: true,
-    plugins:{
-        legend:{
-            position:'top'
+    plugins: {
+        legend: {
+            position: 'top'
         }
     },
     hover: {
@@ -86,30 +86,35 @@ const options = {
 
 <template>
     <div class="statistic">
-            <div class="chart">
-            <h1>{{props.name}}</h1>
-                <BarChart
-                    v-if="props.type == 'bar'"
-                    :chart-data="data"
-                    :options="options"
-                    class="chart"
-                />
-                <LineChart
-                    v-else-if="props.type == 'line'"
-                    :chart-data="data"
-                    :options="options"
-                    class="chart"
-                />
-
-            </div>
-            <!-- <PieChart v-else :chart-data="data" :options="options" class="chart" /> -->
+        <div class="chart">
+            <h1>{{ props.name }}</h1>
+            <BarChart
+                v-if="props.type == 'bar'"
+                :chart-data="data"
+                :options="options"
+                class="chart"
+            />
+            <LineChart
+                v-else-if="props.type == 'line'"
+                :chart-data="data"
+                :options="options"
+                class="chart"
+            />
+            <PieChart
+                v-else-if="props.type == 'pie'"
+                :chart-data="data"
+                :options="options"
+                class="chart"
+            />
+        </div>
+        <!-- <PieChart v-else :chart-data="data" :options="options" class="chart" /> -->
     </div>
 </template>
 
 
 <style scoped>
 .chart_container {
-    overflow:hidden;
+    overflow: hidden;
     height: 45%;
     width: 90%;
     position: relative;
@@ -134,16 +139,17 @@ const options = {
     justify-content: space-around;
     align-items: center;
 }
-@media (min-width: 900px){
-    .statistic{
+@media (min-width: 900px) {
+    .statistic {
         flex-direction: row;
     }
-    .chart_container, .description {
+    .chart_container,
+    .description {
         height: 90%;
         width: 45%;
     }
 }
-.statistic + .statistic{
+.statistic + .statistic {
     margin-top: 5rem;
 }
 .statistic + .statistic {

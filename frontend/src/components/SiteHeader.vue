@@ -5,8 +5,8 @@
                 data-testid="maggie-viewer_image-component"
                 class="header_image"
                 id="swss_bnking_hdr_img"
-                src="https://assets.foleon.com/eu-west-2/uploads-7e3kk3/48335/swissbanking_logo_rgb.59b6a8aa3f19.svg"
-                alt="image"
+                src="/swissbanking_logo.svg"
+                alt="logo"
             />
         </a>
         <div class="links">

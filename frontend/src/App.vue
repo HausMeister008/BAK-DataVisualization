@@ -22,15 +22,15 @@ import TopNav from './components/TopNav.vue'
 }
 @font-face{
   font-family: LibreFranklin;
-  src: url('../public/LibreFranclin/LibreFranklin-VariableFont_wght.ttf');
+  src: url('/LibreFranclin/LibreFranklin-VariableFont_wght.ttf');
 }
 @font-face{
   font-family: LibreFranklinRegular;
-  src: url('../public/LibreFranclin/LibreFranklin-Regular.ttf');
+  src: url('/LibreFranclin/LibreFranklin-Regular.ttf');
 }
 @font-face{
   font-family: LibreFranklinMedium;
-  src: url('../public/LibreFranclin/LibreFranklin-Medium.ttf');
+  src: url('/LibreFranclin/LibreFranklin-Medium.ttf');
 }
 body {
   margin: 0;
@@ -41,7 +41,7 @@ body {
   color: var(--base)
 }
 #app {
-  font-family: LibreFranklinRegular,Calibri, sans-serif;
+  font-family: LibreFranklinRegular, Calibri, sans-serif;
   font-size: 1.1rem;
   line-height: 140%;
   /* text-align: center; */

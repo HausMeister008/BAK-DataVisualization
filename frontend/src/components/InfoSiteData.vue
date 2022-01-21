@@ -52,7 +52,7 @@ export var data_contents: Array<content> = [
     visuals: [
       {
         name:
-          'Der Vermögensanteil von ausländischen Kunden nahm zwischen 2010 und 2020 von 51,9 Prozent auf 46,3 Prozent ab. Der Rückgang der Vermögens­anteile von ausländischen Kunden ist auf verschiedene Gründe zurück­zuführen. Zum einen ist der Währungseffekt zu nennen. Ausländische Kunden halten einen wesentlich höheren Anteil ihrer Vermögen in Euro und Dollar als inländische Kunden. Die Vermögensanteile werden auf Basis von Schweizer Franken berechnet. Im Umfeld eines steigenden Schweizer Frankens sinkt automatisch das Vermögen der ausländischen Kunden in Relation zu den inländischen Kunden. Ein weiterer Grund könnte der Übergang zu höheren Anforderungen an die steuerliche Compliance von Bankkunden sein. Ausländische Kunden transferierten zumindest teilweise ihre Vermögen zur Regularisierung ihrer Steuersituation in ihre Heimat­länder. Trotz des Rückgangs der Vermögensanteile gegenüber den ausländischen Kunden sind die verwalteten Vermögen im gleichen Zeitraum um CHF 807,1 Mrd. angestiegen.',
+          'In der Schweiz verwaltete Vermögen nach Domizil der Kunden',
         type: 'line',
         filled: true
       },

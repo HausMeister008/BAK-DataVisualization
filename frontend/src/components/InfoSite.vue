@@ -21,7 +21,7 @@ interface datares {
   keys: Array<string>,
   date: string
 }
-var data_order: Array<string> = reactive([])
+const data_order: Array<string> = reactive([])
 const data: Array<datares> = reactive([])
 
 async function load_data() {
@@ -29,8 +29,8 @@ async function load_data() {
   var result: Array<datares> = await res.json()
   data_order.splice(0, data_order.length, ...result.map((r) => { return r.name }))
   data.splice(0, data.length, ...result)
-  console.log(data_order)
-  console.log(data)
+  console.log('data_order:', data_order)
+  console.log('data:', data)
   console.log('loading data')
 }
 onMounted(load_data)
@@ -45,6 +45,13 @@ function check_header_in_viewport() {
   // content_header_shown.value = content_header.value.isInViewport()
 }
 
+</script>
+
+<script lang="ts">
+const scrollPageTo = (navEl:string)=>{
+  let element = document.querySelector(`#${navEl.replaceAll(' ', '')}`)
+  element?.scrollIntoView()
+}
 </script>
 
 <template>
@@ -70,12 +77,25 @@ function check_header_in_viewport() {
           >Weiterlesen</button>
         </div>
       </div>
-      <div class="overview"></div>
-      <div class="data_tag" v-for="content in data_contents">
+
+      <div class="overview">
+        <h1 class="overview_headline">Entwicklungen im Jahr 2020</h1>
+        <div class="overview_links" :style="'--oneLinkWidth:' + 1/data_contents.length">
+          <a
+            class="overview_link"
+            v-for="content in data_contents"
+            :href="'#'" 
+            v-on:click.prevent="scrollPageTo(content.name)"
+          >{{ content.name }}</a>
+        </div>
+      </div>
+
+      <div class="data_tag" v-for="content in data_contents" :id="content.name.replaceAll(' ', '')">
         <chart-description
-          v-if="content.paragraphs && content.orientation == 'left'"
+          v-if="content.description && content.paragraphs && content.orientation == 'right'"
           :headline="content.name"
           :content="content.paragraphs"
+          :description="content.description"
         />
         <div class="charts">
           <statistic
@@ -87,13 +107,14 @@ function check_header_in_viewport() {
             :type="visual.type"
             class="statistic"
             v-if="data.length > 0 && data_order.length > 0"
-            :v-if="data_order.indexOf(visual.name)>=0"
+            :v-if="data_order.indexOf(visual.name) >= 0"
           />
         </div>
         <chart-description
-          v-if="content.paragraphs && content.orientation == 'right'"
+          v-if="content.description && content.paragraphs && content.orientation == 'left'"
           :headline="content.name"
           :content="content.paragraphs"
+          :description="content.description"
         />
       </div>
       <!-- <statistic
@@ -119,11 +140,26 @@ function check_header_in_viewport() {
 </template>
 
 <style scoped>
+.data_tag {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  display: grid;
+  grid-template-columns: 40% 50%;
+  padding-top: 90px !important;
+}
+.charts {
+}
+@media (min-width: 900px) {
+  .data_tag {
+    flex-direction: row;
+  }
+}
 .info_site {
   scroll-behavior: smooth;
   min-height: calc(100vh - var(--nav_height));
 }
-.content * {
+.content > * {
   padding: 0 60px;
 }
 a,
@@ -196,6 +232,7 @@ a {
   min-height: calc(100vh - var(--nav_height));
   padding-left: 0;
   padding-right: 0;
+  margin-top: 5rem;
 }
 .footer_description_text {
   font-family: LibreFranklinMedium, Calibri, sans-serif;
@@ -227,5 +264,40 @@ a {
   font-family: LibreFranklinMedium, Calibri, sans-serif;
   font-weight: 500;
   font-size: 1.5rem;
+}
+.overview {
+  margin: 90px 0 0 60px;
+}
+.overview_headline {
+  margin: 0 0 30px 30px;
+  font-size: 1.9rem;
+}
+.overview_links {
+  --overview_height: 7rem;
+  display: inline-block;
+  height: var(--overview_height);
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  padding: calc((var(--overview_height) / 2) - 1.1rem) 0 0 0 !important;
+}
+.overview_link {
+  display: inline-block;
+  max-width: calc((100%*var(--oneLinkWidth)) - 28px);
+  height: 100%;
+  padding-right: 1rem !important;
+  font-size: 1.1rem;
+  color: var(--base);
+  font-family: LibreFranklinMedium;
+  position: relative;
+}
+.overview_link::after {
+  content: "";
+  height: 1px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: var(--base);
 }
 </style>

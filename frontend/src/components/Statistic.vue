@@ -20,42 +20,66 @@ export interface Properties {
 }
 interface dataset {
     label: string,
-    backgroundColor: string,
-    data: Object
+    backgroundColor: string|string[],
+    data: Object|number[]
 }
 
 const props = defineProps<Properties>();
-const colors = ['rgb(255,99,132)', 'rgb(99,255,132)', 'rgb(99,190,200)', 'rgb(99,140,200)']
-const opac_colors = ['rgba(255,99,132, .8)', 'rgba(99,255,132, .8)', 'rgba(99,190,200, .8)', 'rgba(99,140,200, .8)']
+const colors = ['#ffc2b3', '#99e9ff', '#97e7a4', '#b6c1c9']
+const opac_colors = ['#ffc2b3cc', '#99e9ffcc', '#97e7a4cc', '#b6c1c9cc']
 const date: string = props.date
 var yValues = props.data
-var keys = props.keys.map((key) => { return key }).slice(0, props.keys.length)
-
-const datasets: Array<dataset> = yValues
-    .filter((d) => {
-        var ret_val = Object.values(d).map((dd: string) => { return dd }).join().replaceAll(',', '') != ""
-        return ret_val
+var keys 
+var datasets: dataset[]
+if (props.type != 'pie') {
+    keys = props.keys.map((key) => { return key }).slice(0, props.keys.length)
+    datasets = yValues
+        .filter((d) => {
+            var ret_val = Object.values(d).
+                map((dd: string) => {
+                    return dd
+                }).join().replaceAll(',', '') != ""
+            return ret_val
+        })
+        .map((d: Object, i) => {
+            var label: string = d[date] ?? 'No Description'
+            // removing the date from each dataset => doesnt show up on x-axis => no label when loading again
+            if (i == yValues.length - 1) delete d[date]
+            return {
+                label: label,
+                backgroundColor: opac_colors[i % opac_colors.length],
+                borderColor: colors[i % colors.length],
+                hoverBackgroundColor: colors[i % colors.length],
+                poinHoverRadius: 1,
+                pointRadius: 1,
+                pointBorderColor: 'rgba(0,0,0,.5)',
+                pointBorderWidth: 6,
+                poinBorderHoverWidth: 7,
+                pointHoverBackgroundColor: 'rgba(0,0,0,1)',
+                fill: true,
+                fillOpacity: .5,
+                data: d
+            }
+        })
+} else {
+    keys = yValues.map(v=>{return Object.values(v)[0]})
+    datasets = [{
+        label: 'Dataset',
+        backgroundColor: [],
+        data:[]
+    }]
+    yValues.forEach((d:Object, i)=>{
+        var label: string = `Dataset ${i}`
+        datasets[0].backgroundColor.push(opac_colors[i % opac_colors.length])
+        datasets[0].data.push(Object.values(d)[1])
     })
-    .map((d: Object, i) => {
-        var label: string = d[date] ?? 'No Description'
-        // removing the date from each dataset => doesnt show up on x-axis => no label when loading again
-        if (i == yValues.length - 1) delete d[date]
-        return {
-            label: label,
-            backgroundColor: opac_colors[i % opac_colors.length],
-            borderColor: colors[i % colors.length],
-            hoverBackgroundColor: colors[i % colors.length],
-            poinHoverRadius: 1,
-            pointRadius: 1,
-            pointBorderColor: 'rgba(0,0,0,.5)',
-            pointBorderWidth: 6,
-            poinBorderHoverWidth: 7,
-            pointHoverBackgroundColor: 'rgba(0,0,0,1)',
-            fill: true,
-            fillOpacity: .5,
-            data: d
-        }
-    })
+    // data.labels = []
+    // data.datasets.forEach(dataset=>{
+    //     data.labels.push(dataset.label)
+    //     dataset.label = Object.values(dataset.data)[0]
+    //     dataset.data = Object.values(dataset.data)[1]
+    // })
+}
 const data = {
     labels: keys,
     datasets: datasets
@@ -87,7 +111,7 @@ const options = {
 <template>
     <div class="statistic">
         <div class="chart">
-            <h1>{{ props.name }}</h1>
+            <h1 class="chart_headline">{{ props.name }}</h1>
             <BarChart
                 v-if="props.type == 'bar'"
                 :chart-data="data"
@@ -113,46 +137,22 @@ const options = {
 
 
 <style scoped>
-.chart_container {
-    overflow: hidden;
-    height: 45%;
-    width: 90%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-}
 .chart {
     width: 100%;
     height: 80%;
 }
 .statistic {
     position: relative;
-    width: 100%;
-    min-height: 100vh;
     background: var(--anit_base);
     color: var(--base);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-}
-@media (min-width: 900px) {
-    .statistic {
-        flex-direction: row;
-    }
-    .chart_container,
-    .description {
-        height: 90%;
-        width: 45%;
-    }
+    min-height: 400px;
+    width: 100%;
+    margin-left: 10%;
 }
 .statistic + .statistic {
     margin-top: 5rem;
 }
-.statistic + .statistic {
-    margin: 5vh 0;
+.chart_headline {
+    font-size: 1.1rem;
 }
 </style>

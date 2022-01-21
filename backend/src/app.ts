@@ -38,7 +38,9 @@ app.get('/api/data', async (req, res) => {
             result_data.push(result)
             result.date = result.keys.sort().pop()
             if (result_data.length == files.length){
-                console.log(result_data)
+                result_data.forEach(d=>{
+                    console.log(d.name, d.data, d.keys)
+                })
                 res.send(result_data)
             }
         })  

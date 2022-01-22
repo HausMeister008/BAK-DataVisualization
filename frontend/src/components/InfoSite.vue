@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
+// This starter template is  using V ue  3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import Statistic from './Statistic.vue'
 import SiteHeader from './SiteHeader.vue'
@@ -48,7 +48,7 @@ function check_header_in_viewport() {
 </script>
 
 <script lang="ts">
-const scrollPageTo = (navEl:string)=>{
+const scrollPageTo = (navEl: string) => {
   let element = document.querySelector(`#${navEl.replaceAll(' ', '')}`)
   element?.scrollIntoView()
 }
@@ -80,17 +80,22 @@ const scrollPageTo = (navEl:string)=>{
 
       <div class="overview">
         <h1 class="overview_headline">Entwicklungen im Jahr 2020</h1>
-        <div class="overview_links" :style="'--oneLinkWidth:' + 1/data_contents.length">
+        <div class="overview_links" :style="'--oneLinkWidth:' + 1 / data_contents.length">
           <a
             class="overview_link"
             v-for="content in data_contents"
-            :href="'#'" 
+            :href="'#'"
             v-on:click.prevent="scrollPageTo(content.name)"
           >{{ content.name }}</a>
         </div>
       </div>
 
-      <div class="data_tag" v-for="content in data_contents" :id="content.name.replaceAll(' ', '')">
+      <div
+        class="data_tag"
+        v-for="content in data_contents"
+        :id="content.name.replaceAll(' ', '')"
+        v-scrollanimation
+      >
         <chart-description
           v-if="content.description && content.paragraphs && content.orientation == 'right'"
           :headline="content.name"
@@ -105,7 +110,6 @@ const scrollPageTo = (navEl:string)=>{
             :date="data[data_order.indexOf(visual.name)].date"
             :name="visual.name"
             :type="visual.type"
-            class="statistic"
             v-if="data.length > 0 && data_order.length > 0"
             :v-if="data_order.indexOf(visual.name) >= 0"
           />
@@ -140,20 +144,45 @@ const scrollPageTo = (navEl:string)=>{
 </template>
 
 <style scoped>
+
 .data_tag {
   overflow: hidden;
   width: 100%;
   position: relative;
   display: grid;
-  grid-template-columns: 40% 50%;
+  grid-template-columns: 100%;
   padding-top: 90px !important;
+  margin-bottom: 5rem;
 }
-.charts {
-}
-@media (min-width: 900px) {
+@media (min-width: 1000px) {
   .data_tag {
-    flex-direction: row;
+    grid-template-columns: 40% 50%;
   }
+  .content *{
+    padding-right: 0;
+  }
+}
+.charts{
+  display:grid;
+  grid-template-rows: auto;
+  align-items: center;
+  transition-delay: .2s !important;
+  transition: transform .75s ease-in-out, opacity .75s ease-in-out;
+}
+
+
+.data_tag.before-enter > .charts{
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.data_tag.before-enter > .description + .charts {
+    opacity: 0;
+    transform: translateX(30px);
+}
+.data_tag.enter > .charts {
+  opacity: 1;
+  transform: translateX(0);
 }
 .info_site {
   scroll-behavior: smooth;
@@ -161,6 +190,7 @@ const scrollPageTo = (navEl:string)=>{
 }
 .content > * {
   padding: 0 60px;
+  width:calc(100% - 60px);
 }
 a,
 .same_page_link {
@@ -283,7 +313,7 @@ a {
 }
 .overview_link {
   display: inline-block;
-  max-width: calc((100%*var(--oneLinkWidth)) - 28px);
+  max-width: calc((100% * var(--oneLinkWidth)) - 28px);
   height: 100%;
   padding-right: 1rem !important;
   font-size: 1.1rem;

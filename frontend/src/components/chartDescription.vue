@@ -37,6 +37,29 @@ const props = defineProps<DescriptionProperties>();
     max-width: 100%;
     min-width: 30ch;
 }
+.description * {
+    transition: transform .75s ease-in-out, opacity .75s ease-in-out;
+}
+.description h1{
+  transition-delay: .2s !important;
+}
+.description p{
+  transition-delay: .3s !important;
+}
+
+
+.data_tag.before-enter > .charts + .description *{
+    opacity: 0;
+    transform: translateX(3rem);
+}
+.data_tag.before-enter > .description *{
+    opacity: 0;
+    transform: translateX(-3rem);
+}
+.data_tag.enter > .description *{
+    opacity: 1;
+    transform: translateX(0);
+}
 .description h1{
     margin:0;
 }

@@ -1,15 +1,28 @@
 <script setup lang="ts">
 import TopNav from './components/TopNav.vue'
+import {watch, ref} from 'vue'
+import {useRoute} from 'vue-router'
+
+const route = useRoute()
+
+
+
+watch(route, (new_route, old_route) => {
+  console.log(new_route.params, old_route.params)
+})
+
 </script>
 
 <template>
   <top-nav></top-nav>
-  <router-view v-slot="{ Component, route }" >
-  <!-- :enter-active-class="route.meta.enterClass" :leave-active-class="route.meta.leaveClass" -->
-    <transition name="slide">
-      <component :is="Component" :key="route.path" />
-    </transition>
-  </router-view>
+  <div class="page_container">
+    <router-view v-slot="{ Component, route }">
+    <!-- :enter-active-class="route.meta.enterClass" :leave-active-class="route.meta.leaveClass" -->
+      <transition name="slide">
+        <component :is="Component" :key="route.path" />
+      </transition>
+    </router-view>
+  </div>
 </template>
 
 <style>
@@ -47,8 +60,8 @@ body {
   /* text-align: center; */
   margin: 0;
   padding: 0;
-  height: auto;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   overflow: auto;
   position: relative;
 }
@@ -56,14 +69,19 @@ body {
   font-weight: 500;
   font-family: LibreFranklinMedium, Calibri, sans-serif;
 }
-.page {
-  position: fixed;
-  top: 0;
-  left: 0;
-  padding-top: var(--nav_height);
+.page_container{
   width: 100%;
   height: 100%;
   overflow: auto;
+  position: relative;
+}
+.page {
+  position: absolute;
+  top: var(--nav_height);
+  left: 0;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
   z-index: 9;
 }
 .slide-enter-from {

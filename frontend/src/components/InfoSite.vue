@@ -29,9 +29,6 @@ async function load_data() {
   var result: Array<datares> = await res.json()
   data_order.splice(0, data_order.length, ...result.map((r) => { return r.name }))
   data.splice(0, data.length, ...result)
-  console.log('data_order:', data_order)
-  console.log('data:', data)
-  console.log('loading data')
 }
 onMounted(load_data)
 watch(route, (n, o) => {
@@ -147,12 +144,12 @@ const scrollPageTo = (navEl: string) => {
 
 .data_tag {
   overflow: hidden;
-  width: 100%;
   position: relative;
   display: grid;
   grid-template-columns: 100%;
   padding-top: 90px !important;
   margin-bottom: 5rem;
+  width: calc(100% - 60px)
 }
 @media (min-width: 1000px) {
   .data_tag {
@@ -190,7 +187,6 @@ const scrollPageTo = (navEl: string) => {
 }
 .content > * {
   padding: 0 60px;
-  width:calc(100% - 60px);
 }
 a,
 .same_page_link {

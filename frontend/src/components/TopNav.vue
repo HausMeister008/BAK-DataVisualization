@@ -88,8 +88,9 @@ function scrollnav(event: MouseEvent) {
         >
             <router-link
                 class="routerlinks"
-                v-for="route in possible_routes"
+                v-for="route, index in possible_routes"
                 :to="'/info/' + route"
+                :id="'TopNavLink' + index.toString()"
             >{{ route }}</router-link>
         </div>
         <social-media-links />
